@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+  <div class="parentBtn"> 
+    <button id="darkModeBtn" class="btn"> 
+    <img id="darkModeImg" src="img/night-mode.png" alt="mode icon" width="30">
+    Light Mode</button>
+  </div>
+ 
+
+
+    <div class="container">
+         <h2>Todo List</h2>
+         <p class="author">By <a href="https://github.com/azizrahimov2509" target="blank">Rahimov A.</a></p>
+         <form id="todoForm">
+            <input id="searchInp" type="text" required placeholder="Enter todo...">
+            <button id="submitBtn" type="submit">Add</button>
+         </form>
+        
+        <ul id="productList">
+          
+        </ul>        
+</div>
+ 
+     <modal id="modal" class="modal hidden">
+          <form style="padding: 7px;" id="editForm">
+            <input style="border: 1px solid #ccc; padding: 8px;" id="editInp" type="text" required placeholder="Enter todo...">
+            <button id="editBtn" type="submit">Edit</button>
+        </form>
+      </modal>
+    <div id="overlay" class="overlay hidden"></div>
+  <script src="app.js"></script>  
+</body>
+</html>
