@@ -78,7 +78,7 @@ function createTodos(data=todoArr){
              <p style=" opacity: 0.7">${time}</p>
               <div> 
                 <i class="fa-regular fa-pen-to-square" style="margin-right: 5px;" onclick="updateTodo(${id})"></i>
-                <i style="color: red;" class="fa-solid fa-trash" onclick="deleteTodo(${id})"></i> 
+                <i style="color: red;" class="fa-solid fa-trash" onclick="deleteTodo(${id}), confirmDelete(${id})"></i> 
                 
               </div>`;
 
@@ -148,3 +148,17 @@ darkModeBtn.addEventListener('click',()=>{
     }
   
 });
+
+
+
+//ConfirmDelete
+
+function confirmDelete(itemId) {
+    var result = confirm("Aniq o'chirib yubormoqchimisiz?");
+    if (result) {
+        deleteTodo(itemId);
+    } else {
+    
+        alert("O'chirilmadi!");
+    }
+}
