@@ -41,7 +41,10 @@ todoForm.addEventListener('submit',(e)=>{
     time:date.toLocaleString('uz-UZ',{
     hour:'numeric',
     minute:'numeric',
-    second:'numeric'})
+    day:'2-digit',
+    month:'2-digit',
+    year:'numeric'
+})
   }
  todoArr.push(todo);
  searchInp.value="";
@@ -71,7 +74,7 @@ function createTodos(data=todoArr){
             <span></span>
           </label>
          
-             <p style="margin-right: auto; display: inline-block; text-decoration: ${textDecoration}">${text}</p>
+             <p style="margin-right: auto; display: inline-block; text-decoration: ${textDecoration}; ">${text}</p>
              <p style=" opacity: 0.7">${time}</p>
               <div> 
                 <i class="fa-regular fa-pen-to-square" style="margin-right: 5px;" onclick="updateTodo(${id})"></i>
