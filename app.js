@@ -22,12 +22,16 @@ function closeModal(){
     overlay.classList.add('hidden');
 }
 
-overlay.addEventListener('click',()=>{
-    console.log(1);
-})
+
+overlay.addEventListener('click', () => {
+    closeModal();
+});
+
 //////
 
-let todoArr = [];
+let todoArr = JSON.parse(localStorage.getItem('todos')) ? JSON.parse(localStorage.getItem('todos')) :[];
+
+createTodos();
 
 todoForm.addEventListener('submit',(e)=>{
   e.preventDefault();
@@ -35,7 +39,7 @@ todoForm.addEventListener('submit',(e)=>{
 
  
   let todo = {
-    id:Math.floor(Math.random()*1000),
+    id:date.getTime(),
     text: searchInp.value,
     completed:false,
     time:date.toLocaleString('uz-UZ',{
@@ -47,14 +51,16 @@ todoForm.addEventListener('submit',(e)=>{
 })
   }
  todoArr.push(todo);
+ localStorage.setItem('todos', JSON.stringify(todoArr));
  searchInp.value="";
  createTodos(todoArr);
+
 });
 
  
 
 // createTodos
-function createTodos(data=todoArr){
+function createTodos(data = todoArr){
     productList.innerHTML ="";
 
     data.forEach(({id,text,time,completed}) => {
@@ -78,7 +84,7 @@ function createTodos(data=todoArr){
              <p style=" opacity: 0.7">${time}</p>
               <div> 
                 <i class="fa-regular fa-pen-to-square" style="margin-right: 5px;" onclick="updateTodo(${id})"></i>
-                <i style="color: red;" class="fa-solid fa-trash" onclick="deleteTodo(${id}), confirmDelete(${id})"></i> 
+                <i style="color: red;" class="fa-solid fa-trash" onclick="confirmDelete(${id})"></i> 
                 
               </div>`;
 
@@ -87,11 +93,11 @@ function createTodos(data=todoArr){
 }
 
 
-
 //delete
 
 function deleteTodo(itemId){
    todoArr=todoArr.filter(({id})=> id !== itemId);
+   localStorage.setItem('todos', JSON.stringify(todoArr));
     createTodos(todoArr);
 }
 
@@ -99,21 +105,28 @@ function deleteTodo(itemId){
 //update
 function updateTodo(itemId){
     openModal();
-    editForm.addEventListener('submit',(e)=>{
-      e.preventDefault();
 
-      todoArr = todoArr.map((item)=>{
-        if(item.id === itemId){
-            return{...item,
-            text:editInp.value,
-            completed:false,}
-        }
-        return item;
-      });
-      createTodos();
-      closeModal();
+    function onSubmit(e){
+            e.preventDefault();
       
-    })
+            todoArr = todoArr.map((item)=>{
+              if(item.id === itemId){
+                  return{...item,
+                  text:editInp.value,
+                  completed:false,}
+              }
+              return item;
+            });
+            localStorage.setItem('todos', JSON.stringify(todoArr));
+        
+      
+            editInp.value = '';
+            closeModal();
+            e.target.reset();
+            createTodos();
+        return editForm.removeEventListener("submit",onSubmit);
+    }
+    editForm.addEventListener('submit',onSubmit);
 }
 
 
@@ -128,37 +141,50 @@ function completeTodo(itemId){
         }
         return item;
       });
+      localStorage.setItem('todos', JSON.stringify(todoArr));
       createTodos();
+}
+
+
+// confirmDelete
+function confirmDelete(itemId) {
+    var result = confirm("Aniq o'chirib yubormoqchimisiz?");
+    if (result) {
+        deleteTodo(itemId);
+    } else {
+        alert("O'chirilmadi!");
+    }
 }
 
 
 const darkModeBtn = document.getElementById("darkModeBtn");
 const darkModeImg =document.getElementById("darkModeImg")
  
+if((localStorage.getItem('DarkMode') === "dark")){
+    document.body.classList.remove("light");
+        darkModeBtn.lastChild.textContent ="LightMode";
+        darkModeImg.setAttribute('src','img/day-mode.png');
+}else{
+    document.body.classList.add('light');
+        darkModeBtn.lastChild.textContent = "DarkMode"
+        darkModeImg.setAttribute('src','img/night-mode.png');
+}
+
+
 darkModeBtn.addEventListener('click',()=>{
 
     if(document.body.classList.contains("light")){
         document.body.classList.remove("light");
-        darkModeBtn.lastChild.textContent ="Light Mode";
-        darkModeImg.setAttribute('src','img/day-mode.png')
+        darkModeBtn.lastChild.textContent ="LightMode";
+        darkModeImg.setAttribute('src','img/day-mode.png');
+        localStorage.setItem('DarkMode',"dark");
     } else{
         document.body.classList.add('light');
-        darkModeBtn.lastChild.textContent = "Dark Mode"
-        darkModeImg.setAttribute('src','img/night-mode.png')
+        darkModeBtn.lastChild.textContent = "DarkMode"
+        darkModeImg.setAttribute('src','img/night-mode.png');
+        localStorage.setItem('DarkMode',"light");
     }
-  
 });
 
 
 
-//ConfirmDelete
-
-function confirmDelete(itemId) {
-    var result = confirm("Aniq o'chirib yubormoqchimisiz?");
-    if (result) {
-        deleteTodo(itemId);
-    } else {
-    
-        alert("O'chirilmadi!");
-    }
-}
